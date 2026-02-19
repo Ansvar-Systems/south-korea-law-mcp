@@ -1,0 +1,184 @@
+{
+  "$schema": "./golden-tests.schema.json",
+  "version": "1.0",
+  "mcp_name": "South Korea Law MCP",
+  "description": "Golden contract tests for the South Korea Law MCP covering personal information protection, ICT network security, credit information, electronic government, and intelligent informatization legislation",
+  "tests": [
+    {
+      "id": "kr-001",
+      "category": "article_retrieval",
+      "description": "Retrieve Article 1 of PIPA (\uac1c\uc778\uc815\ubcf4 \ubcf4\ud638\ubc95) \u2014 purpose clause establishing protection of personal information",
+      "tool": "get_provision",
+      "input": {
+        "law_identifier": "\uac1c\uc778\uc815\ubcf4 \ubcf4\ud638\ubc95",
+        "article": "1"
+      },
+      "assertions": {
+        "result_not_empty": true,
+        "text_contains": ["\uac1c\uc778\uc815\ubcf4", "\uad8c\ub9ac"],
+        "fields_present": ["text", "article_number", "law_name"],
+        "text_not_empty": true
+      }
+    },
+    {
+      "id": "kr-002",
+      "category": "article_retrieval",
+      "description": "Retrieve Article 15 of PIPA \u2014 collection and use of personal information (consent requirements)",
+      "tool": "get_provision",
+      "input": {
+        "law_identifier": "\uac1c\uc778\uc815\ubcf4 \ubcf4\ud638\ubc95",
+        "article": "15"
+      },
+      "assertions": {
+        "result_not_empty": true,
+        "text_contains": ["\uac1c\uc778\uc815\ubcf4", "\ub3d9\uc758"],
+        "fields_present": ["text", "article_number", "law_name"],
+        "text_not_empty": true
+      }
+    },
+    {
+      "id": "kr-003",
+      "category": "article_retrieval",
+      "description": "Retrieve Article 17 of PIPA \u2014 provision of personal information to third parties",
+      "tool": "get_provision",
+      "input": {
+        "law_identifier": "\uac1c\uc778\uc815\ubcf4 \ubcf4\ud638\ubc95",
+        "article": "17"
+      },
+      "assertions": {
+        "result_not_empty": true,
+        "text_contains": ["\uc81c3\uc790", "\uac1c\uc778\uc815\ubcf4"],
+        "fields_present": ["text", "article_number", "law_name"],
+        "text_not_empty": true
+      }
+    },
+    {
+      "id": "kr-004",
+      "category": "article_retrieval",
+      "description": "Retrieve Article 1 of the Network Act (\uc815\ubcf4\ud1b5\uc2e0\ub9dd\ubc95) \u2014 purpose clause",
+      "tool": "get_provision",
+      "input": {
+        "law_identifier": "\uc815\ubcf4\ud1b5\uc2e0\ub9dd \uc774\uc6a9\ucd09\uc9c4 \ubc0f \uc815\ubcf4\ubcf4\ud638 \ub4f1\uc5d0 \uad00\ud55c \ubc95\ub960",
+        "article": "1"
+      },
+      "assertions": {
+        "result_not_empty": true,
+        "text_contains": ["\uc815\ubcf4\ud1b5\uc2e0\ub9dd"],
+        "fields_present": ["text", "article_number", "law_name"],
+        "text_not_empty": true
+      }
+    },
+    {
+      "id": "kr-005",
+      "category": "search",
+      "description": "Full-text search for '\uac1c\uc778\uc815\ubcf4' (personal information) returns PIPA-related provisions",
+      "tool": "search_legislation",
+      "input": {
+        "query": "\uac1c\uc778\uc815\ubcf4"
+      },
+      "assertions": {
+        "result_not_empty": true,
+        "min_results": 1,
+        "any_result_contains": ["\uac1c\uc778\uc815\ubcf4 \ubcf4\ud638\ubc95", "\uac1c\uc778\uc815\ubcf4"]
+      }
+    },
+    {
+      "id": "kr-006",
+      "category": "search",
+      "description": "Full-text search for '\uc0ac\uc774\ubc84' (cyber) returns cybersecurity-related provisions",
+      "tool": "search_legislation",
+      "input": {
+        "query": "\uc0ac\uc774\ubc84"
+      },
+      "assertions": {
+        "result_not_empty": true,
+        "min_results": 1,
+        "any_result_contains": ["\uc0ac\uc774\ubc84", "\uc815\ubcf4\ubcf4\ud638", "\uc815\ubcf4\ud1b5\uc2e0\ub9dd"]
+      }
+    },
+    {
+      "id": "kr-007",
+      "category": "search",
+      "description": "Full-text search for 'personal information' in English returns PIPA provisions via KLRI translations",
+      "tool": "search_legislation",
+      "input": {
+        "query": "personal information"
+      },
+      "assertions": {
+        "result_not_empty": true,
+        "min_results": 1,
+        "any_result_contains": ["personal information", "PIPA", "\uac1c\uc778\uc815\ubcf4"]
+      }
+    },
+    {
+      "id": "kr-008",
+      "category": "citation_roundtrip",
+      "description": "Citation for PIPA Article 1 includes official law.go.kr URL pattern",
+      "tool": "get_provision",
+      "input": {
+        "law_identifier": "\uac1c\uc778\uc815\ubcf4 \ubcf4\ud638\ubc95",
+        "article": "1"
+      },
+      "assertions": {
+        "result_not_empty": true,
+        "fields_present": ["text", "article_number"],
+        "citation_url_pattern": "^https?://(www\\.)?law\\.go\\.kr/",
+        "text_not_empty": true
+      }
+    },
+    {
+      "id": "kr-009",
+      "category": "citation_roundtrip",
+      "description": "Citation for Credit Information Act Article 1 includes official identifier and law name",
+      "tool": "get_provision",
+      "input": {
+        "law_identifier": "\uc2e0\uc6a9\uc815\ubcf4\uc758 \uc774\uc6a9 \ubc0f \ubcf4\ud638\uc5d0 \uad00\ud55c \ubc95\ub960",
+        "article": "1"
+      },
+      "assertions": {
+        "result_not_empty": true,
+        "fields_present": ["text", "article_number", "law_name"],
+        "text_not_empty": true
+      }
+    },
+    {
+      "id": "kr-010",
+      "category": "eu_cross_reference",
+      "description": "Cross-reference lookup for PIPA returns GDPR relationship information",
+      "tool": "get_provision_eu_basis",
+      "input": {
+        "law_identifier": "\uac1c\uc778\uc815\ubcf4 \ubcf4\ud638\ubc95"
+      },
+      "assertions": {
+        "result_not_empty": true,
+        "any_result_contains": ["GDPR", "2016/679", "General Data Protection", "personal data"]
+      }
+    },
+    {
+      "id": "kr-011",
+      "category": "negative_test",
+      "description": "Non-existent law identifier returns graceful error or empty result",
+      "tool": "get_provision",
+      "input": {
+        "law_identifier": "\uc874\uc7ac\ud558\uc9c0 \uc54a\ub294 \ubc95\ub960 9999",
+        "article": "1"
+      },
+      "assertions": {
+        "handles_gracefully": true
+      }
+    },
+    {
+      "id": "kr-012",
+      "category": "negative_test",
+      "description": "Malformed article number returns graceful error or empty result",
+      "tool": "get_provision",
+      "input": {
+        "law_identifier": "\uac1c\uc778\uc815\ubcf4 \ubcf4\ud638\ubc95",
+        "article": "ABC-INVALID"
+      },
+      "assertions": {
+        "handles_gracefully": true
+      }
+    }
+  ]
+}

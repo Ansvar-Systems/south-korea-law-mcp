@@ -1,0 +1,86 @@
+# sources.yml
+schema_version: "1.0"
+mcp_name: "South Korea Law MCP"
+jurisdiction: "KR"
+
+sources:
+  - name: "Korean Law Information Center (국가법령정보센터)"
+    authority: "Ministry of Government Legislation (법제처), Government of the Republic of Korea"
+    official_portal: "https://www.law.go.kr"
+    canonical_identifier: "N/A (laws identified by law number and title, e.g., '법률 제19234호')"
+    retrieval_method: "API"
+    api_documentation: "https://open.law.go.kr"
+    update_frequency: "on_change"
+    last_ingested: "PENDING_FIRST_INGEST"
+    license_or_terms:
+      type: "Government Open Data (Korea Open Data Portal)"
+      url: "https://www.data.go.kr"
+      summary: "Korean government legislation is publicly available under the government open data policy; Korean Law Information Center is the official repository maintained by the Ministry of Government Legislation"
+    coverage:
+      scope: "All Korean statutes (법률), presidential decrees (대통령령), ministerial ordinances (부령), and administrative rules; includes the Personal Information Protection Act (PIPA), Network Act (Act on Promotion of ICT Network Utilization and Information Protection), Credit Information Act, Electronic Government Act, Framework Act on Intelligent Informatization, and IT Network Act"
+      limitations: "Does not include court decisions (covered by Korean court system portals), local government ordinances (covered by ELIS), or draft legislation; historical versions may have limited availability"
+    languages:
+      - "ko"
+
+  - name: "KLRI English Law Translations (영문법령)"
+    authority: "Korea Legislation Research Institute (한국법제연구원, KLRI)"
+    official_portal: "https://elaw.klri.re.kr"
+    canonical_identifier: "N/A"
+    retrieval_method: "HTML_SCRAPE"
+    api_documentation: "N/A (searchable web portal; no public API)"
+    update_frequency: "on_change"
+    last_ingested: "PENDING_FIRST_INGEST"
+    license_or_terms:
+      type: "Government Open Data (Reference Translations)"
+      url: "https://elaw.klri.re.kr"
+      summary: "English translations published by KLRI for reference purposes; not legally binding; the Korean text is the sole authoritative version"
+    coverage:
+      scope: "Official English translations of major Korean laws including PIPA, Network Act, Credit Information Act, Electronic Government Act, Framework Act on Intelligent Informatization, and key commercial statutes; over 700 laws translated"
+      limitations: "Not all laws have English translations; translations may lag behind Korean text amendments; some translations are partial (key articles only)"
+    languages:
+      - "en"
+      - "ko"
+
+  - name: "Personal Information Protection Commission (PIPC / 개인정보보호위원회)"
+    authority: "Personal Information Protection Commission, Government of the Republic of Korea"
+    official_portal: "https://www.pipc.go.kr"
+    canonical_identifier: "N/A"
+    retrieval_method: "HTML_SCRAPE"
+    api_documentation: "N/A"
+    update_frequency: "on_change"
+    last_ingested: "PENDING_FIRST_INGEST"
+    license_or_terms:
+      type: "Government Public Data"
+      url: "https://www.pipc.go.kr"
+      summary: "PIPC guidelines, enforcement actions, and policy documents are publicly available"
+    coverage:
+      scope: "PIPA guidelines and interpretive standards, enforcement actions and penalty decisions, data subject rights guidance, cross-border transfer rules, and PIPC annual reports"
+      limitations: "Guidelines are supplementary to PIPA and may be updated independently; some enforcement details may be partially redacted"
+    languages:
+      - "ko"
+      - "en"
+
+data_freshness:
+  automated_checks: true
+  check_frequency: "weekly"
+  last_verified: "PENDING_FIRST_INGEST"
+
+# Notes:
+# - Korean Law Information Center (law.go.kr) provides an open API at open.law.go.kr
+#   with structured access to Korean legislation; API key required (free registration)
+# - KLRI (elaw.klri.re.kr) provides the most authoritative English translations
+#   of Korean legislation; maintained by the Korea Legislation Research Institute
+# - South Korea has one of the world's strictest data protection regimes
+# - PIPC (Personal Information Protection Commission) has strong enforcement powers
+#   including administrative fines of up to 3% of relevant turnover (amended 2023)
+# - PIPA was substantially amended in 2023 with expanded data subject rights,
+#   stronger penalties, and mandatory DPO appointment requirements
+# - South Korea does not have an EU GDPR adequacy decision as of 2026, but
+#   adequacy talks have been ongoing since 2022
+# - The Network Act (정보통신망법) historically covered both personal information
+#   protection for online services and cybersecurity; personal information provisions
+#   were transferred to PIPA in the 2020 amendments
+# - The Credit Information Act (신용정보법) was amended in 2020 to incorporate
+#   MyData provisions and financial data portability
+# - The Framework Act on Intelligent Informatization (지능정보화기본법) is South Korea's
+#   framework for AI governance and intelligent information services

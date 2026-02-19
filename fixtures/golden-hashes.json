@@ -1,0 +1,56 @@
+{
+  "$schema": "./golden-hashes.schema.json",
+  "version": "1.0",
+  "mcp_name": "South Korea Law MCP",
+  "jurisdiction": "KR",
+  "provisions": [
+    {
+      "id": "kr-hash-001",
+      "description": "Constitution of the Republic of Korea Article 17 \u2014 right to privacy; constitutional basis for personal information protection in Korean law",
+      "upstream_url": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=61603",
+      "selector_hint": "\uc81c17\uc870",
+      "expected_sha256": "COMPUTE_ON_FIRST_INGEST",
+      "expected_snippet": "\ubaa8\ub4e0 \uad6d\ubbfc\uc740 \uc0ac\uc0dd\ud65c\uc758 \ube44\ubc00\uacfc \uc790\uc720\ub97c \uce68\ud574\ubc1b\uc9c0 \uc544\ub2c8\ud55c\ub2e4"
+    },
+    {
+      "id": "kr-hash-002",
+      "description": "Personal Information Protection Act (PIPA / \uac1c\uc778\uc815\ubcf4 \ubcf4\ud638\ubc95) Article 1 \u2014 purpose clause; substantially amended 2023",
+      "upstream_url": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=256762",
+      "selector_hint": "\uc81c1\uc870",
+      "expected_sha256": "COMPUTE_ON_FIRST_INGEST",
+      "expected_snippet": "\uac1c\uc778\uc815\ubcf4\uc758 \ucc98\ub9ac \ubc0f \ubcf4\ud638\uc5d0 \uad00\ud55c \uc0ac\ud56d"
+    },
+    {
+      "id": "kr-hash-003",
+      "description": "Act on Promotion of ICT Network Utilization and Information Protection (Network Act / \uc815\ubcf4\ud1b5\uc2e0\ub9dd\ubc95) Article 1 \u2014 purpose clause",
+      "upstream_url": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=256763",
+      "selector_hint": "\uc81c1\uc870",
+      "expected_sha256": "COMPUTE_ON_FIRST_INGEST",
+      "expected_snippet": "\uc815\ubcf4\ud1b5\uc2e0\ub9dd\uc758 \uc774\uc6a9\uc744 \ucd09\uc9c4"
+    },
+    {
+      "id": "kr-hash-004",
+      "description": "Credit Information Act (\uc2e0\uc6a9\uc815\ubcf4\ubc95) Article 1 \u2014 purpose clause; amended 2020 with MyData provisions",
+      "upstream_url": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=256764",
+      "selector_hint": "\uc81c1\uc870",
+      "expected_sha256": "COMPUTE_ON_FIRST_INGEST",
+      "expected_snippet": "\uc2e0\uc6a9\uc815\ubcf4"
+    },
+    {
+      "id": "kr-hash-005",
+      "description": "Electronic Government Act (\uc804\uc790\uc815\ubd80\ubc95) Article 1 \u2014 purpose clause",
+      "upstream_url": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=256765",
+      "selector_hint": "\uc81c1\uc870",
+      "expected_sha256": "COMPUTE_ON_FIRST_INGEST",
+      "expected_snippet": "\uc804\uc790\uc815\ubd80"
+    },
+    {
+      "id": "kr-hash-006",
+      "description": "Framework Act on Intelligent Informatization (\uc9c0\ub2a5\uc815\ubcf4\ud654 \uae30\ubcf8\ubc95) Article 1 \u2014 purpose clause; Korea's AI governance framework",
+      "upstream_url": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=256766",
+      "selector_hint": "\uc81c1\uc870",
+      "expected_sha256": "COMPUTE_ON_FIRST_INGEST",
+      "expected_snippet": "\uc9c0\ub2a5\uc815\ubcf4\ud654"
+    }
+  ]
+}
