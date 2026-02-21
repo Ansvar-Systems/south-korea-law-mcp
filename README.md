@@ -123,6 +123,74 @@ Once connected, just ask naturally:
 
 ---
 
+## Laws Covered
+
+| Law | Korean Name | Key Topic |
+|-----|------------|-----------|
+| **Personal Information Protection Act (PIPA)** | 개인정보 보호법 | Personal data protection (one of world's strictest) |
+| **Network Act** | 정보통신망 이용촉진 및 정보보호 등에 관한 법률 | ICT network security, information protection |
+| **Credit Information Act** | 신용정보의 이용 및 보호에 관한 법률 | Financial data, MyData, credit information |
+| **Electronic Government Act** | 전자정부법 | Digital government services, e-government |
+| **Framework Act on Intelligent Informatization** | 지능정보화 기본법 | AI governance, intelligent information services |
+| **IT Network Act** | 정보통신망법 | Network infrastructure, cybersecurity |
+| **Constitution (selected provisions)** | 대한민국헌법 | Fundamental rights, Article 17 (right to privacy) |
+
+Additionally includes key PIPC guidelines and supplementary materials:
+
+- PIPA Standard Guidelines (개인정보 처리 표준지침)
+- PIPC enforcement actions and penalty decisions
+- Cross-border transfer standard contractual clauses
+
+---
+
+## Deployment Tiers
+
+| Tier | Content | Database Size | Platform |
+|------|---------|---------------|----------|
+| **Free** | All major statutes + English translations + EU cross-references | ~80-150 MB | Vercel (bundled) or local |
+| **Professional** | + Presidential decrees + ministerial ordinances + PIPC guidelines + enforcement decisions | ~400 MB-700 MB | Azure Container Apps / Docker / local |
+
+### Deployment Strategy: MEDIUM - Dual Tier, Bundled Free
+
+The free-tier database containing major statutes and English translations is estimated at 80-150 MB, within the Vercel 250 MB bundle limit. The free-tier database is bundled directly with the Vercel deployment. The professional tier with full presidential decrees, ministerial ordinances, and PIPC guidelines requires local Docker or Azure Container Apps deployment.
+
+### Capability Detection
+
+Both tiers use the same codebase. At startup, the server detects available SQLite tables and gates tools accordingly:
+
+```
+Free tier:     core_legislation, eu_references, english_translations
+Professional:  core_legislation, eu_references, english_translations, presidential_decrees, ministerial_ordinances, pipc_guidelines, enforcement_decisions
+```
+
+Tools that require professional capabilities return an upgrade message on the free tier.
+
+---
+
+## Database Size Estimates
+
+| Component | Estimated Size | Notes |
+|-----------|---------------|-------|
+| Major statutes (법률) | ~30-50 MB | Key data protection, ICT, corporate statutes in Korean |
+| English translations (KLRI) | ~20-40 MB | Official KLRI translations of major laws |
+| EU cross-references | ~5-10 MB | PIPA-GDPR, Network Act-NIS2 mappings |
+| FTS5 indexes | ~25-50 MB | Full-text search indexes for Korean text |
+| **Free tier total** | **~80-150 MB** | |
+| Presidential decrees (대통령령) | ~100-200 MB | Implementing decrees for major statutes |
+| Ministerial ordinances (부령) | ~100-200 MB | Ministry-level regulations |
+| PIPC guidelines and enforcement | ~30-50 MB | Interpretive standards, penalty decisions |
+| **Professional tier total** | **~400 MB-700 MB** | |
+
+---
+
+## Language Support
+
+The primary language is **Korean (ko)**, which is the sole legally binding version. Official English translations are available from the Korea Legislation Research Institute (elaw.klri.re.kr). These translations are reference translations and are not legally authoritative.
+
+The search tool supports queries in both Korean and English, with Korean queries using proper morphological analysis for accurate results.
+
+---
+
 ## Available Tools (13)
 
 ### Core Legal Research Tools (8)
