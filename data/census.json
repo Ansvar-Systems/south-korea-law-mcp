@@ -1,0 +1,18 @@
+{
+  "schema_version": "1.0",
+  "jurisdiction": "KR",
+  "jurisdiction_name": "South Korea",
+  "portal": "law.go.kr",
+  "census_date": "2026-02-22",
+  "agent": "claude-opus-4-6",
+  "summary": {
+    "total_laws": 0,
+    "total_provisions": 0,
+    "ingestable": 0,
+    "ingested": 0,
+    "ocr_needed": 0,
+    "inaccessible": 0,
+    "excluded": 0
+  },
+  "laws": []
+}

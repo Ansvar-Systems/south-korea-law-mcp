@@ -7,7 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.0.0] - 2026-XX-XX
+## [1.1.0] - 2026-02-22
+### Added
+- `data/census.json` — golden standard census file (jurisdiction KR, law.go.kr portal)
+- Remote `streamable-http` transport in `server.json` (`https://south-korea-law-mcp.vercel.app/mcp`)
+- Keywords in `server.json` for MCP Registry discovery
+
+### Changed
+- `server.json` now uses `packages` format with dual transport (stdio + streamable-http)
+- Bumped version to 1.1.0
+
+## [1.0.0] - 2026-02-20
 ### Added
 - Initial release of South Korea Law MCP
 - `search_legislation` tool for full-text search across all Korean statutes (Korean + English)
@@ -25,5 +35,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - npm package with stdio transport
 - MCP Registry publishing
 
-[Unreleased]: https://github.com/Ansvar-Systems/south-korea-law-mcp/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/Ansvar-Systems/south-korea-law-mcp/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/Ansvar-Systems/south-korea-law-mcp/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/Ansvar-Systems/south-korea-law-mcp/releases/tag/v1.0.0
