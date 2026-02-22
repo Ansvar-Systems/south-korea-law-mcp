@@ -28,7 +28,8 @@
     "ingest": "tsx scripts/ingest.ts",
     "check:updates": "tsx scripts/check-updates.ts",
     "drift:detect": "tsx scripts/drift-detect.ts",
-    "validate": "npm test && npm run test:contract"
+    "validate": "npm test && npm run test:contract",
+    "check-updates": "node --import tsx scripts/check-updates.ts"
   },
   "dependencies": {
     "@ansvar/mcp-sqlite": "^1.0.3",
