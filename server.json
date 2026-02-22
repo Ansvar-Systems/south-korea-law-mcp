@@ -1,7 +1,7 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "eu.ansvar/south-korea-law-mcp",
-  "description": "South Korean law database covering personal information protection (PIPA), ICT network security, credit information, electronic government, and intelligent informatization legislation with full-text search",
+  "description": "South Korean law database — PIPA, ICT network security, credit information with full-text search",
   "repository": {
     "url": "https://github.com/Ansvar-Systems/south-korea-law-mcp",
     "source": "github"
