@@ -17,7 +17,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
-import { fetchLawList, fetchLawDetail } from './lib/fetcher.js';
+import { fetchLawList, fetchLawDetail, requireApiKey, isApiError } from './lib/fetcher.js';
 import { parseLawList, parseLawXml, type LawIndexEntry, type ParsedLaw } from './lib/parser.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -67,11 +67,6 @@ function parseArgs(): { limit: number | null; skipDiscovery: boolean } {
 async function discoverLaws(): Promise<LawIndexEntry[]> {
   console.log('Phase 1: Discovering Korean laws from open.law.go.kr...\n');
 
-  if (!process.env.KOREA_LAW_API_KEY) {
-    console.log('  WARNING: KOREA_LAW_API_KEY not set. API responses may be limited.');
-    console.log('  Register at https://open.law.go.kr for a free API key.\n');
-  }
-
   const allEntries: LawIndexEntry[] = [];
 
   for (const query of KEY_LAW_QUERIES) {
@@ -85,6 +80,11 @@ async function discoverLaws(): Promise<LawIndexEntry[]> {
 
       if (result.status !== 200) {
         console.log(` HTTP ${result.status} — skipping.`);
+        break;
+      }
+
+      if (isApiError(result.body)) {
+        console.log(` API error — check KOREA_LAW_API_KEY.`);
         break;
       }
 
@@ -153,7 +153,10 @@ async function fetchAndParseLaws(laws: LawIndexEntry[], limit: number | null): P
     try {
       const result = await fetchLawDetail(law.lawId);
 
-      if (result.status !== 200) {
+      if (isApiError(result.body)) {
+        console.log(`  ERROR: API authentication failed for ${law.lawId}. Check KOREA_LAW_API_KEY.`);
+        failed++;
+      } else if (result.status !== 200) {
         if (result.status === 404) {
           const minimalSeed: ParsedLaw = {
             id: `act-${law.lawNumber || law.lawId}`,
@@ -207,6 +210,9 @@ async function main(): Promise<void> {
 
   console.log('South Korea Law MCP — Ingestion Pipeline');
   console.log('=========================================\n');
+
+  // The law.go.kr API requires a registered API key for all operations
+  requireApiKey();
 
   if (limit) console.log(`  --limit ${limit}`);
   if (skipDiscovery) console.log(`  --skip-discovery`);

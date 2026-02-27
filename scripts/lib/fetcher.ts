@@ -63,6 +63,36 @@ export async function fetchWithRateLimit(url: string, maxRetries = 3): Promise<F
 }
 
 /**
+ * Check whether the KOREA_LAW_API_KEY environment variable is set.
+ * The law.go.kr DRF API requires a registered API key (OC parameter).
+ * Without it, all requests return an XML error response with HTTP 200.
+ *
+ * Register for free at: https://open.law.go.kr
+ */
+export function requireApiKey(): void {
+  if (!process.env.KOREA_LAW_API_KEY) {
+    console.error('ERROR: KOREA_LAW_API_KEY environment variable is not set.');
+    console.error('');
+    console.error('The law.go.kr API requires a registered API key.');
+    console.error('Register for free at: https://open.law.go.kr');
+    console.error('Then: export KOREA_LAW_API_KEY=<your-key>');
+    process.exit(1);
+  }
+}
+
+/**
+ * Check if an API response is an error from law.go.kr.
+ * The API returns HTTP 200 with an XML error body when
+ * authentication fails or required parameters are missing.
+ */
+export function isApiError(body: string): boolean {
+  return body.includes('<Response>') && (
+    body.includes('검증에 실패하였습니다') ||
+    body.includes('필수 입력값이 존재하지 않습니다')
+  );
+}
+
+/**
  * Fetch law list from open.law.go.kr API.
  * Returns XML listing of laws matching the query.
  *
@@ -98,7 +128,7 @@ export async function fetchLawDetail(lawId: string): Promise<FetchResult> {
     OC: apiKey,
     target: 'law',
     type: 'XML',
-    ID: lawId,
+    MST: lawId,
   });
 
   const url = `${baseUrl}?${params.toString()}`;
