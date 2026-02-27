@@ -1,8 +1,9 @@
 node_modules/
 dist/
 *.db
-!data/database.db
 !data/.gitkeep
+data/seed/
+data/source/
 .env
 .env.*
 *.tgz

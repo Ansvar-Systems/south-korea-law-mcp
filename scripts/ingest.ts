@@ -27,17 +27,8 @@ const SOURCE_DIR = path.resolve(__dirname, '../data/source');
 const SEED_DIR = path.resolve(__dirname, '../data/seed');
 const INDEX_PATH = path.join(SOURCE_DIR, 'law-index.json');
 
-// Key laws to ingest for the free tier
-const KEY_LAW_QUERIES = [
-  '개인정보 보호법',           // PIPA
-  '정보통신망',                // Network Act
-  '신용정보',                  // Credit Information Act
-  '전자정부법',                // Electronic Government Act
-  '지능정보화 기본법',          // Framework Act on Intelligent Informatization
-  '정보보호',                  // Information Protection
-  '사이버',                    // Cyber-related
-  '대한민국헌법',              // Constitution
-];
+// Wildcard query returns all laws from the API
+const FULL_CORPUS_QUERY = '*';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // CLI argument parsing
@@ -68,39 +59,31 @@ async function discoverLaws(): Promise<LawIndexEntry[]> {
   console.log('Phase 1: Discovering Korean laws from open.law.go.kr...\n');
 
   const allEntries: LawIndexEntry[] = [];
+  let page = 1;
+  let totalCount = 0;
 
-  for (const query of KEY_LAW_QUERIES) {
-    process.stdout.write(`  Searching for: ${query}...`);
+  // Enumerate all laws using wildcard query, 100 per page
+  while (true) {
+    const result = await fetchLawList(page, FULL_CORPUS_QUERY);
 
-    let page = 1;
-    let hasMore = true;
-
-    while (hasMore) {
-      const result = await fetchLawList(page, query);
-
-      if (result.status !== 200) {
-        console.log(` HTTP ${result.status} — skipping.`);
-        break;
-      }
-
-      if (isApiError(result.body)) {
-        console.log(` API error — check KOREA_LAW_API_KEY.`);
-        break;
-      }
-
-      const listResult = parseLawList(result.body);
-      allEntries.push(...listResult.entries);
-
-      console.log(` ${listResult.entries.length} entries (total: ${listResult.totalCount})`);
-
-      hasMore = listResult.hasNextPage;
-      page++;
-
-      if (page > 10) {
-        console.log('    Hit page limit, moving to next query.');
-        break;
-      }
+    if (result.status !== 200) {
+      console.log(`  HTTP ${result.status} on page ${page} — stopping discovery.`);
+      break;
     }
+
+    if (isApiError(result.body)) {
+      console.log(`  API error on page ${page} — check KOREA_LAW_API_KEY.`);
+      break;
+    }
+
+    const listResult = parseLawList(result.body);
+    if (totalCount === 0) totalCount = listResult.totalCount;
+
+    allEntries.push(...listResult.entries);
+    console.log(`  Page ${page}: ${listResult.entries.length} entries (${allEntries.length}/${totalCount})`);
+
+    if (!listResult.hasNextPage || listResult.entries.length === 0) break;
+    page++;
   }
 
   // Deduplicate by lawId
