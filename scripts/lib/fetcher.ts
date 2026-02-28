@@ -8,7 +8,7 @@
  */
 
 const USER_AGENT = 'SouthKoreaLawMCP/1.0 (https://github.com/Ansvar-Systems/south-korea-law-mcp; hello@ansvar.ai)';
-const MIN_DELAY_MS = 500;
+const MIN_DELAY_MS = 200;
 
 let lastRequestTime = 0;
 
@@ -64,10 +64,13 @@ export async function fetchWithRateLimit(url: string, maxRetries = 3): Promise<F
 
 /**
  * Check whether the KOREA_LAW_API_KEY environment variable is set.
- * The law.go.kr DRF API requires a registered API key (OC parameter).
- * Without it, all requests return an XML error response with HTTP 200.
+ * The law.go.kr DRF API requires an API key (OC parameter).
  *
- * Register for free at: https://open.law.go.kr
+ * The 'chetera' key is the publicly documented example key from the
+ * law.go.kr API guide. It works without IP registration restrictions.
+ *
+ * For a dedicated key, register at: https://open.law.go.kr
+ * (requires Korean real-name identity verification)
  */
 export function requireApiKey(): void {
   if (!process.env.KOREA_LAW_API_KEY) {

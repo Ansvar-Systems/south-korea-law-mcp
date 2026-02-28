@@ -24,7 +24,7 @@ const parser = new XMLParser({
   isArray: (name) => {
     return [
       '조문단위', '항', '호', '목',
-      'entry', 'law', '법령',
+      'entry', 'law',
     ].includes(name);
   },
   trimValues: true,
@@ -72,7 +72,7 @@ export function parseLawList(xml: string): LawListResult {
     const lawNumber = extractText(entry['법령번호'] ?? entry.lawNumber ?? entry['공포번호']) ?? '';
     const promulgationDate = extractText(entry['공포일자'] ?? entry.promulgationDate) ?? '';
     const enforcementDate = extractText(entry['시행일자'] ?? entry.enforcementDate) ?? '';
-    const lawType = extractText(entry['법령종류'] ?? entry.lawType ?? '') ?? 'statute';
+    const lawType = extractText(entry['법령구분명'] ?? entry['법령종류'] ?? entry.lawType ?? '') ?? 'statute';
 
     if (!title) continue;
 
@@ -120,30 +120,57 @@ export interface ParsedLaw {
 
 /**
  * Parse an individual law XML document from the law.go.kr API.
+ *
+ * XML structure:
+ *   <법령 법령키="...">
+ *     <기본정보>
+ *       <법령명_한글>...</법령명_한글>
+ *       <법종구분>법률</법종구분>
+ *       ...
+ *     </기본정보>
+ *     <조문>
+ *       <조문단위 조문키="...">
+ *         <조문번호>1</조문번호>
+ *         <조문여부>조문</조문여부>  (조문=article, 전문=section header)
+ *         <조문제목>...</조문제목>
+ *         <조문내용>...</조문내용>
+ *         <항><항내용>...</항내용></항>
+ *       </조문단위>
+ *     </조문>
+ *   </법령>
  */
 export function parseLawXml(xml: string, lawId: string): ParsedLaw {
   const parsed = parser.parse(xml);
 
   const root = parsed['법령'] ?? parsed.law ?? parsed;
 
-  const title = extractText(root['법령명_한글'] ?? root['법령명한글'] ?? root.lawNameKorean ?? root['법령명']) ?? '';
-  const titleEn = extractText(root['법령명_영문'] ?? root['법령명영문'] ?? root.lawNameEnglish) ?? '';
-  const lawNumber = extractText(root['법령번호'] ?? root.lawNumber ?? root['공포번호']) ?? '';
-  const promulgationDate = extractText(root['공포일자'] ?? root.promulgationDate) ?? '';
-  const enforcementDate = extractText(root['시행일자'] ?? root.enforcementDate) ?? '';
-  const lawType = extractText(root['법령종류'] ?? root.lawType) ?? '';
+  // Metadata is nested under 기본정보
+  const info = root['기본정보'] ?? root;
+
+  const title = extractText(info['법령명_한글'] ?? info['법령명한글'] ?? root['법령명_한글'] ?? root['법령명']) ?? '';
+  const titleEn = extractText(info['법령명_영문'] ?? info['법령명영문'] ?? root['법령명_영문']) ?? '';
+  const lawNumber = extractText(info['공포번호'] ?? info['법령번호'] ?? root['공포번호']) ?? '';
+  const promulgationDate = extractText(info['공포일자'] ?? root['공포일자']) ?? '';
+  const enforcementDate = extractText(info['시행일자'] ?? root['시행일자']) ?? '';
+  const lawTypeNode = info['법종구분'] ?? root['법종구분'] ?? {};
+  const lawType = extractText(lawTypeNode) ?? '';
 
   const type = inferDocumentType(lawType);
   const shortName = buildShortName(title);
 
   const provisions: ParsedProvision[] = [];
 
-  // Parse articles (조문)
-  const articles = root['조문'] ?? root['조문단위'] ?? root.articles ?? [];
-  const articleList = Array.isArray(articles) ? articles : [articles].filter(Boolean);
+  // Articles are nested under 조문 > 조문단위
+  const joMun = root['조문'];
+  const articleUnits = joMun?.['조문단위'] ?? root['조문단위'] ?? [];
+  const articleList = Array.isArray(articleUnits) ? articleUnits : [articleUnits].filter(Boolean);
 
   for (const article of articleList) {
     if (!article) continue;
+
+    // Skip section/chapter headers (전문) — only parse actual articles (조문)
+    const articleType = extractText(article['조문여부']) ?? '';
+    if (articleType === '전문') continue;
 
     const articleNumber = extractText(article['조문번호'] ?? article.articleNumber) ?? '';
     const articleTitle = extractText(article['조문제목'] ?? article.articleTitle) ?? '';
@@ -176,6 +203,17 @@ export function parseLawXml(xml: string, lawId: string): ParsedLaw {
         if (itemContent.trim()) {
           fullContent += '\n  ' + itemContent;
         }
+
+        // Parse sub-items (목)
+        const subItems = item['목'] ?? [];
+        const subList = Array.isArray(subItems) ? subItems : [subItems].filter(Boolean);
+        for (const sub of subList) {
+          if (!sub) continue;
+          const subContent = extractText(sub['목내용'] ?? sub) ?? '';
+          if (subContent.trim()) {
+            fullContent += '\n    ' + subContent;
+          }
+        }
       }
     }
 
@@ -190,7 +228,7 @@ export function parseLawXml(xml: string, lawId: string): ParsedLaw {
   }
 
   return {
-    id: `act-${lawNumber || lawId}`,
+    id: `act-${lawId}`,
     type,
     title,
     title_en: titleEn,
