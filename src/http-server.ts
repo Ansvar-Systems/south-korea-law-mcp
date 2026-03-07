@@ -27,6 +27,7 @@ import Database from '@ansvar/mcp-sqlite';
 
 import { registerTools } from './tools/registry.js';
 import { detectCapabilities, readDbMetadata } from './capabilities.js';
+import { wrapWithPremiumTools } from "./premium-tools.js";
 
 // Local type — avoids import from ./tools/about.js which may not exist in all repos.
 // The registerTools() `context` parameter is optional (`?`) so this is safe.
@@ -134,6 +135,7 @@ async function main() {
       { capabilities: { tools: {} } },
     );
     registerTools(server, db, aboutContext);
+    wrapWithPremiumTools(server, db);
     return server;
   }
 
