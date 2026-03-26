@@ -38,7 +38,7 @@
       "version": "1.1.2",
       "transport": {
         "type": "streamable-http",
-        "url": "https://mcp.ansvar.eu/law-south-korea-law-mcp/mcp"
+        "url": "https://south-korea-law-mcp.vercel.app/mcp"
       }
     }
   ]
