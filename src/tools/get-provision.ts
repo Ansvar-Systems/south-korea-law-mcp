@@ -5,6 +5,7 @@
 import type { Database } from '@ansvar/mcp-sqlite';
 import { resolveExistingStatuteId } from '../utils/statute-id.js';
 import { generateResponseMetadata, type ToolResponse } from '../utils/metadata.js';
+import { buildProvisionCitation } from '../utils/citation.js';
 
 export interface GetProvisionInput {
   law_identifier: string;
@@ -124,7 +125,20 @@ export async function getProvision(
   }
 
   if (rows.length === 1) {
-    return { results: mapRow(rows[0]), _metadata: generateResponseMetadata(db) };
+    const mapped = mapRow(rows[0]);
+    return {
+      results: mapped,
+      _citation: buildProvisionCitation(
+        mapped.document_id,
+        mapped.document_title,
+        mapped.provision_ref,
+        input.law_identifier,
+        input.article || '',
+        mapped.citation_url || null,
+        mapped.document_title_en || null,
+      ),
+      _metadata: generateResponseMetadata(db),
+    };
   }
 
   return { results: rows.map(r => mapRow(r)), _metadata: generateResponseMetadata(db) };
